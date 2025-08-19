@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Users & RFID</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f6f7fb; padding:20px; }
+    h1 { color:#2563eb; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { padding:12px; border-bottom:1px solid #e5e7eb; text-align:left; }
+    th { text-transform:uppercase; font-size:12px; color:#6b7280; }
+    button { padding:6px 10px; border:none; border-radius:6px; cursor:pointer; }
+    .edit { background:#2563eb; color:#fff; }
+    .del { background:#ef4444; color:#fff; }
+    .add { background:#10b981; color:#fff; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <h1>Manage Users & RFID</h1>
+
+  <form>
+    <label>Name: <input type="text" placeholder="Full Name"></label>
+    <label>Email: <input type="email" placeholder="name@example.com"></label>
+    <label>RFID UID: <input type="text" placeholder="Scan RFID Card"></label>
+    <button class="add">Add User</button>
+  </form>
+
+  <table>
+    <thead><tr><th>User ID</th><th>Name</th><th>Email</th><th>RFID UID</th><th>Actions</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>U-0007</td><td>Daniella Kim Longgat</td><td>daniella@example.com</td><td>DE AD BE EF</td>
+        <td><button class="edit">Edit</button> <button class="del">Delete</button></td>
+      </tr>
+      <tr>
+        <td>U-0008</td><td>Juan Dela Cruz</td><td>juan@example.com</td><td>AB CD 12 34</td>
+        <td><button class="edit">Edit</button> <button class="del">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

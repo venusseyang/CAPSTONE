@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar Charging Dashboard</title>
+  <style>
+    /* Background with gradient */
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #a5b4fc, #f9a8d4, #fcd34d);
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1f2937;
+      font-size: 32px;
+      margin-bottom: 30px;
+      font-weight: bold;
+    }
+
+    /* Card container */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    .value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    /* Status labels */
+    .status-ok {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #d1fae5;
+      color: #065f46;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .status-warn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    /* Table styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      background: #fff;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+    }
+
+    th {
+      background: #2563eb;
+      color: #fff;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    tr:nth-child(even) { background: #f9fafb; }
+    tr:nth-child(odd) { background: #ffffff; }
+    tr:hover { background: #e0e7ff; transition: 0.3s; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>⚡ Solar Charging Station Dashboard ⚡</h1>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Total Registered Users</h3>
+      <div class="value">18</div>
+    </div>
+    <div class="card">
+      <h3>Active Charging Sessions</h3>
+      <div class="value">3</div>
+    </div>
+    <div class="card">
+      <h3>Temperature (°C)</h3>
+      <div class="value">28.5</div>
+    </div>
+    <div class="card">
+      <h3>System Status</h3>
+      <div class="status-ok">Operational</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Session ID</th>
+        <th>User</th>
+        <th>RFID UID</th>
+        <th>Start Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>S-20250818-001</td>
+        <td>Daniella Kim Longgat</td>
+        <td>DE AD BE EF</td>
+        <td>08:31</td>
+        <td class="status-ok">Charging</td>
+      </tr>
+      <tr>
+        <td>S-20250818-002</td>
+        <td>Venus Sey-ang</td>
+        <td>AB CD 12 34</td>
+        <td>08:35</td>
+        <td class="status-warn">Completed</td>
+      </tr>
+        <tr>
+        <td>S-20250818-003</td>
+        <td>Vhen Carl Castillo</td>
+        <td>BC AB FE S2</td>
+        <td>08:35</td>
+        <td class="status-warn">Completed</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>
