@@ -30,10 +30,10 @@
       cursor:pointer; font-weight:600; color:white; transition:0.3s;
     }
     .add { background: linear-gradient(45deg, #10b981, #34d399); }
-    .add:hover { transform:scale(1.05); }
+    .edit { background: linear-gradient(45deg, #3b82f6, #2563eb); }
     .soft { background: linear-gradient(45deg, #f59e0b, #fbbf24); }
     .hard { background: linear-gradient(45deg, #ef4444, #f87171); }
-    .restore { background: linear-gradient(45deg, #3b82f6, #2563eb); }
+    .restore { background: linear-gradient(45deg, #16a34a, #22c55e); }
     .toggle { background: linear-gradient(45deg, #9333ea, #a855f7); margin-bottom:15px; }
     table {
       width:100%; border-collapse:collapse; border-radius:12px; overflow:hidden;
@@ -50,18 +50,28 @@
     .nav { margin-top:20px; text-align:center; }
     .nav a { margin:0 10px; text-decoration:none; font-weight:600; color:#2563eb; }
     #archivedTable { display:none; }
+
+    /* Modal */
+    .modal {
+      display:none; position:fixed; z-index:1000; left:0; top:0;
+      width:100%; height:100%; background:rgba(0,0,0,0.5);
+      display:flex; justify-content:center; align-items:center;
+    }
+    .modal-content {
+      background:#fff; padding:25px; border-radius:12px;
+      width:90%; max-width:500px; position:relative;
+      box-shadow:0 6px 18px rgba(0,0,0,0.2);
+    }
+    .modal-content h2 { margin-top:0; color:#1f2937; }
+    .close {
+      position:absolute; top:10px; right:15px;
+      font-size:20px; cursor:pointer; color:#555;
+    }
   </style>
 </head>
 <body>
 <div class="container">
   <h1>🌟 Manage Users & RFID 🌟</h1>
-
-  <form method="POST" action="">
-    <label>Name: <input type="text" name="name" required></label>
-    <label>Email: <input type="email" name="email" required></label>
-    <label>RFID UID: <input type="text" name="rfid_uid" required></label>
-    <button type="submit" name="add" class="add">Add User</button>
-  </form>
 
   <?php
   // ADD USER
@@ -76,7 +86,15 @@
     }
   }
 
-  //  ARCHIVED
+  // UPDATE USER
+  if (isset($_POST['update'])) {
+    $id = (int)$_POST['user_id'];
+    $name = $_POST['name']; $email = $_POST['email']; $rfid_uid = $_POST['rfid_uid'];
+    $sql = "UPDATE users SET name='$name', email='$email', rfid_uid='$rfid_uid' WHERE user_id=$id";
+    echo $conn->query($sql) ? "<div class='message success'>✅ User updated!</div>" : "<div class='message error'>❌ Error: {$conn->error}</div>";
+  }
+
+  // SOFT DELETE
   if (isset($_GET['soft_delete'])) {
     $id = (int)$_GET['soft_delete'];
     $conn->query("UPDATE users SET status='deleted' WHERE user_id=$id");
@@ -90,13 +108,21 @@
     header("Location: crud_users.php"); exit();
   }
 
-  //  DELETE
+  // HARD DELETE
   if (isset($_GET['hard_delete'])) {
     $id = (int)$_GET['hard_delete'];
     $conn->query("DELETE FROM users WHERE user_id=$id");
     header("Location: crud_users.php"); exit();
   }
   ?>
+
+  <!-- Add User Form -->
+  <form method="POST" action="">
+    <label>Name: <input type="text" name="name" required></label>
+    <label>Email: <input type="email" name="email" required></label>
+    <label>RFID UID: <input type="text" name="rfid_uid" required></label>
+    <button type="submit" name="add" class="add">Add User</button>
+  </form>
 
   <!-- Active Users -->
   <h2>Active Users</h2>
@@ -115,7 +141,8 @@
           <td>{$row['email']}</td>
           <td>{$row['rfid_uid']}</td>
           <td>
-            <a href='crud_users.php?soft_delete={$row['user_id']}'><button class='soft'> ARCHIVED</button></a>
+            <button class='edit' onclick=\"openEditModal({$row['user_id']},'{$row['name']}','{$row['email']}','{$row['rfid_uid']}')\">Edit</button>
+            <a href='crud_users.php?soft_delete={$row['user_id']}'><button class='soft'>Archive</button></a>
             <a href='crud_users.php?hard_delete={$row['user_id']}' onclick=\"return confirm('Are you sure? This cannot be undone!')\"><button class='hard'>Delete</button></a>
           </td>
         </tr>";
@@ -160,17 +187,39 @@
   </div>
 </div>
 
+<!-- Edit Modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Edit User</h2>
+    <form method="POST" action="">
+      <input type="hidden" name="user_id" id="edit_id">
+      <label>Name: <input type="text" name="name" id="edit_name" required></label>
+      <label>Email: <input type="email" name="email" id="edit_email" required></label>
+      <label>RFID UID: <input type="text" name="rfid_uid" id="edit_rfid" required></label>
+      <button type="submit" name="update" class="edit">Update User</button>
+    </form>
+  </div>
+</div>
+
 <script>
 function toggleArchived(){
   var x=document.getElementById("archivedTable");
   if(x.style.display==="none" || x.style.display===""){
-    x.style.display="block";
-    event.target.textContent="Hide Archived Users";
+    x.style.display="block"; event.target.textContent="Hide Archived Users";
   } else {
-    x.style.display="none";
-    event.target.textContent="Show Archived Users";
+    x.style.display="none"; event.target.textContent="Show Archived Users";
   }
 }
+
+function openEditModal(id,name,email,rfid){
+  document.getElementById("edit_id").value=id;
+  document.getElementById("edit_name").value=name;
+  document.getElementById("edit_email").value=email;
+  document.getElementById("edit_rfid").value=rfid;
+  document.getElementById("editModal").style.display="flex";
+}
+function closeModal(){ document.getElementById("editModal").style.display="none"; }
 </script>
 </body>
 </html>
